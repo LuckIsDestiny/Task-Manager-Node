@@ -1,30 +1,32 @@
-import express, {
-  NextFunction,
-  Request,
-  Response,
-  type Express,
-} from "express";
+import type { NextFunction, Request, Response, Express } from "express";
+import express from "express";
+import helmet from "helmet";
 import cors from "cors";
+import authRouter from "./modules/auth/auth.routes.js";
+import taskRouter from "./modules/tasks/task.routes.js";
 import { AppError } from "./utils/AppError.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import { prisma } from "./lib/prisma.js";
+import { env } from "./config/env.js";
 
 const app: Express = express();
 
+app.use(helmet());
+app.use(cors({ origin: env.CLIENT_URL }));
 app.use(express.json());
-app.use(cors());
 
-app.get("/db-test", async (_req: Request, res: Response) => {
-  const count = await prisma.user.count();
-  res.status(200).json({ success: true, count });
+if (env.IS_PROD) {
+  app.set("trust proxy", 1);
+}
+
+app.use("/api/auth", authRouter);
+app.use("/api/tasks", taskRouter);
+
+app.get("/health", (_req: Request, res: Response) => {
+  res.status(200).json({ success: true });
 });
 
-//routes
-// app.use("/auth", authRoutes)
-// app.use("/task", taskRoutes)
-
-app.use((req: Request, _res: Response, _next: NextFunction) => {
-  throw new AppError(`Route not found: ${req.originalUrl}`, 404);
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  next(new AppError(`Route not found: ${req.originalUrl}`, 404));
 });
 
 app.use(errorHandler);
