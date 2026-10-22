@@ -18,8 +18,8 @@ export const createTask = async (req: Request, res: Response) => {
 export const getTasks = async (req: Request, res: Response) => {
   const user = getAuthUser(req);
   const filters: FilterQuerySchema = res.locals.query;
-  const task = await taskService.getTasks(user, filters);
-  res.status(200).json({ success: true, data: task });
+  const paginatedTasks = await taskService.getTasks(user, filters);
+  res.status(200).json({ success: true, data: paginatedTasks });
 };
 
 export const getTaskById = async (req: Request, res: Response) => {
