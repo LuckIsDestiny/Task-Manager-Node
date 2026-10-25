@@ -1,0 +1,23 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "concurrently -c \"cyan,magenta\" -n \"REACT,API\" \"pnpm --filter client dev\" \"pnpm --filter server dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.15.0",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.15.0",
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}

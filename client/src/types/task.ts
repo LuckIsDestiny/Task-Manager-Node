@@ -36,3 +36,10 @@ export type PaginatedTasks = {
   page: number;
   limit: number;
 };
+
+export type TaskFilters = {
+  status?: TaskStatus;
+  priority?: Priority;
+  page?: number;
+  limit?: number;
+};
