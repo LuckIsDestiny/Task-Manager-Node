@@ -16,28 +16,47 @@ A small full-stack app for practice: users register, log in, and manage their ow
 - **Database:** PostgreSQL on Neon, accessed with Prisma 7
 - **Auth:** JWT with role-based access (`USER`, `ADMIN`)
 - **Validation:** Zod
-- **Package manager:** pnpm
+- **Package manager:** pnpm (Workspace setup)
 
 ## Project Structure
 
 ```text
 my-app/
-  client/                 # React app
-    src/
-      components/
-        ui/               # shadcn/ui primitives (Button, Card, Dialog, etc.)
-      pages/              # Page views (TasksPage, LoginPage, etc.)
-      services/           # API integration
-      types/              # Shared TypeScript interfaces
-  server/                 # Express API
-    prisma/schema.prisma  # Database models
-    src/
-      modules/
-        auth/             # Register, login
-        tasks/            # Task CRUD
-      middlewares/        # auth, authorize, validate, errorHandler
-      utils/              # AppError, catchAsync
-      lib/prisma.ts       # Prisma client
-      app.ts
-      server.ts
-```
+├── pnpm-workspace.yaml                  # Monorepo workspace configuration
+├── client/                              # Frontend React Application
+│   ├── components.json                  # shadcn/ui configuration
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── src/
+│       ├── components/                  # UI and functional components
+│       │   └── ui/                      # shadcn/ui primitives
+│       │       ├── Pagination.tsx
+│       │       ├── ProtectedRoute.tsx
+│       │       ├── TaskFilters.tsx
+│       │       ├── TaskForm.tsx
+│       │       └── TaskItem.tsx
+│       ├── context/                     # Authentication context
+│       ├── lib/                         # Axios instance and token management
+│       ├── pages/                       # Application views (Login, Tasks, etc.)
+│       ├── services/                    # API integration methods
+│       ├── types/                       # Frontend TypeScript models
+│       ├── utils/
+│       ├── App.tsx
+│       └── main.tsx
+└── server/                              # Backend Express API
+    ├── prisma/
+    │   ├── migrations/
+    │   └── schema.prisma                # Database models
+    ├── prisma7.config.ts
+    ├── Task App.postman_collection.json # Postman collection for API testing
+    ├── package.json
+    └── src/
+        ├── config/                      # Environment variables validation
+        ├── generated/prisma/            # Auto-generated Prisma client
+        ├── lib/                         # Prisma client initialization
+        ├── middlewares/                 # Auth, authorization, error handling, rate limiting
+        ├── modules/                     # Feature-based module grouping (auth, tasks)
+        ├── types/                       # Express Request type extensions
+        ├── utils/                       # AppError, async catchers, auth helpers
+        ├── app.ts                       # Express application setup
+        └── server.ts                    # Entry point & server listener
